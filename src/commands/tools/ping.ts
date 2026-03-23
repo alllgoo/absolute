@@ -10,8 +10,7 @@ const command: Command = {
   execute: async (client, message, args) => {
     try {
       const start = Date.now();
-      
-      // Initial message to calculate latency
+
       const msg = await message.reply('🛰️ **Pinging...**');
 
       const latency = Date.now() - start;

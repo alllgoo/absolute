@@ -10,7 +10,15 @@ app.use(cors());
  * Professional HTML template with Server-Side Rendering (SSR) for OG Tags.
  * This is what Discord sees when it fetches the link.
  */
-const renderOGPage = (title: string, description: string, color: string = "#2b2d31", image: string = "https://zeldris44.vercel.app/favicon.ico") => {
+const renderOGPage = (title: string, description: string, color: string = "#97f9ff", image: string = "https://zeldris44.vercel.app/favicon.ico") => {
+    // Basic Markdown to HTML converter for Discord-like styles
+    const formattedDesc = description
+        .replace(/\n/g, '<br>') // New lines
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
+        .replace(/__(.*?)__/g, '<u>$1</u>') // Underline
+        .replace(/`(.*?)`/g, '<code>$1</code>') // Code
+        .replace(/^> (.*)/gm, '<blockquote>$1</blockquote>'); // Blockquotes
+
     return `
 <!DOCTYPE html>
 <html lang="en">
@@ -49,6 +57,10 @@ const renderOGPage = (title: string, description: string, color: string = "#2b2d
         .author { font-size: 0.8rem; font-weight: 600; color: #fff; margin-bottom: 8px; }
         .title { font-weight: bold; font-size: 1rem; margin-bottom: 8px; color: #00a8fc; text-decoration: none; display: block; }
         .desc { color: #dbdee1; font-size: 0.9rem; line-height: 1.4; white-space: pre-wrap; }
+        .desc strong { color: #fff; }
+        .desc u { text-decoration: underline; }
+        .desc code { background: #2b2d31; padding: 2px 4px; border-radius: 3px; font-family: monospace; }
+        .desc blockquote { border-left: 4px solid #4e5058; margin: 4px 0; padding-left: 8px; color: #b5bac1; }
         .footer { font-size: 0.75rem; color: #949ba4; margin-top: 12px; }
     </style>
 </head>
@@ -56,7 +68,7 @@ const renderOGPage = (title: string, description: string, color: string = "#2b2d
     <div class="card">
         <div class="author">☁️ ﾟılı ﾟ.Tokyo aid ϑρ System</div>
         <div class="title">${title}</div>
-        <div class="desc">${description}</div>
+        <div class="desc">${formattedDesc}</div>
         <div class="footer">☁️ ﾟılı ﾟ.Tokyo aid ϑρ is ready to serve</div>
     </div>
 </body>
