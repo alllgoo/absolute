@@ -34,9 +34,8 @@ export class VoiceManager {
       const { output } = prepareStream(streamInfo.stream, {
         width: 1280,
         height: 720,
-        fps: 30,
         bitrateVideo: 3000,
-      });
+      } as any);
 
       await playStream(output, this.streamer, {
         type: "go-live"
