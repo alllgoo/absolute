@@ -13,8 +13,10 @@ export class VoiceManager {
 
   public async startVideoStream(channelId: string, query: string, guildId: string) {
     try {
-      // 0. Clean the query (remove backticks, spaces, etc.)
-      const cleanQuery = query.replace(/[`\s]/g, '');
+      // 0. Robust Clean the query (remove backticks, leading/trailing spaces, and any Discord formatting)
+      const cleanQuery = query.replace(/[`*_~]/g, '').trim().split(' ')[0];
+      
+      Logger.info(`[STREAM] Processing URL: "${cleanQuery}" (Original: "${query}")`);
       
       let channel: any = this.client.channels.cache.get(channelId);
       if (!channel) channel = await this.client.channels.fetch(channelId);
