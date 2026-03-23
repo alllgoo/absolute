@@ -25,7 +25,8 @@ export class EmbedBuilder extends MessageEmbed {
     const fullUrl = `${baseUrl}/${route}${query ? `?${query}` : ''}`;
     
     // Returns the link formatted to be hidden in Discord while still triggering the embed
-    return `[\u200B](${fullUrl})`;
+    // Using U+2800 (Braille Pattern Blank) which is invisible but counts as a character
+    return `[⠀](${fullUrl})`;
   }
 
   /**
