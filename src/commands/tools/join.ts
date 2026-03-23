@@ -13,10 +13,14 @@ const command: Command = {
 
     if (args[0] && !isNaN(Number(args[0]))) {
       vcId = args[0];
-      const channel = client.channels.cache.get(vcId);
-      if (channel && channel.isVoice()) {
-        vcName = channel.name;
-      } else {
+      try {
+        const channel = await client.channels.fetch(vcId);
+        if (channel && channel.isVoice()) {
+          vcName = (channel as any).name;
+        } else {
+          vcName = 'Unknown Channel';
+        }
+      } catch (e) {
         vcName = 'Unknown Channel';
       }
     } else if (voiceChannel) {
@@ -28,17 +32,18 @@ const command: Command = {
       return;
     }
 
-    try {
-      await client.voiceManager.joinChannel(vcId);
+    const success = await client.voiceManager.joinChannel(vcId);
+    if (success) {
       const user = message.author.username;
+      
+      // Generate dynamic server URL for Discord OG preview
       const ogUrl = EmbedBuilder.generateServerUrl('join', { user, vc: vcName });
 
       await message.reply({
         content: ogUrl
       });
-    } catch (error) {
-      console.error('[JOIN ERROR]', error);
-      const errorUrl = EmbedBuilder.generateServerUrl('error', { msg: "Failed to join the voice channel." });
+    } else {
+      const errorUrl = EmbedBuilder.generateServerUrl('error', { msg: "Failed to join the voice channel. Check permissions or ID." });
       await message.reply({ content: errorUrl });
     }
   }
