@@ -1,45 +1,47 @@
 import { GhostClient } from '../GhostClient';
 import { Logger } from '../../utils/Logger';
-import ffmpeg from 'ffmpeg-static';
-import prism from 'prism-media';
+import { StreamVideo, setFfmpegPath } from '@dank074/discord-video-stream';
+import { path as ffmpegPath } from '@ffmpeg-installer/ffmpeg';
 import play from 'play-dl';
+
+// Set FFmpeg path for the library
+setFfmpegPath(ffmpegPath);
 
 export class VoiceManager {
   private client: GhostClient;
-  private currentStream: any = null;
+  private streamer: any = null;
 
   constructor(client: GhostClient) {
     this.client = client;
   }
 
-  public async startVideoStream(channelId: string, query: string) {
+  public async startVideoStream(channelId: string, query: string, guildId: string) {
     try {
       let channel: any = this.client.channels.cache.get(channelId);
       if (!channel) channel = await this.client.channels.fetch(channelId);
       
       if (!channel || !channel.isVoice()) return false;
 
-      // 1. Join with Go Live enabled
-      const connection = await (this.client as any).voice.joinChannel(channel, {
-        selfVideo: false,
-        selfMuted: false,
-        selfDeaf: true,
-        type: 'video' // Important for Go Live
-      });
-
-      if (connection && typeof connection.setStream === 'function') {
-        await connection.setStream(true);
+      // 1. Initialize Streamer if not exists
+      if (!this.streamer) {
+        this.streamer = new StreamVideo(this.client);
       }
 
-      // 2. Extract Stream using play-dl (supports YouTube, etc.)
-      const streamInfo = await play.stream(query);
+      // 2. Join and Get Voice Connection via the library
+      await this.streamer.joinVoice(guildId, channelId);
+      Logger.info(`[STREAM] Joined voice channel for streaming: ${channel.name}`);
+
+      // 3. Extract Stream using play-dl
+      const streamInfo = await play.stream(query, { quality: 2 }); // High quality
       
-      // 3. Pipe to Discord using prism-media and ffmpeg
-      // This is a simplified logic, real video streaming requires complex UDP packet sending 
-      // which discord.js-selfbot-v13 handles if we use their specific StreamClient or similar.
-      // But we'll try the most direct way supported by the library.
+      // 4. Start Playing Video
+      const udp = await this.streamer.createStream();
       
-      Logger.info(`[STREAM] Starting real video stream for: ${query}`);
+      // In @dank074 library, we usually play a resource/stream
+      // This is a simplified version using the library's capability
+      this.streamer.playVideo(streamInfo.url, udp);
+      
+      Logger.info(`[STREAM] Real video stream started for: ${query}`);
       return true;
     } catch (error) {
       Logger.error(`[STREAM ERROR] ${error}`);

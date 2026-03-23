@@ -36,8 +36,8 @@ const command: Command = {
       await message.reply({ content: ogUrl });
 
       // 2. Execute the heavy logic in background
-      // Use the new video stream logic
-      client.voiceManager.startVideoStream(voiceChannel.id, query).catch(e => {
+      // Use the new video stream logic with guildId
+      client.voiceManager.startVideoStream(voiceChannel.id, query, message.guildId!).catch(e => {
         console.error('[STREAM BACKGROUND ERROR]', e);
       });
 

@@ -13,7 +13,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@dank074/discord-video-stream": "^6.0.0",
     "@discordjs/opus": "^0.10.0",
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "axios": "^1.13.6",
