@@ -19,7 +19,7 @@ const command: Command = {
       } else {
         vcName = 'Unknown Channel';
       }
-    } else if (voiceChannel) {n
+    } else if (voiceChannel) {
       vcId = voiceChannel.id;
       vcName = ('name' in voiceChannel ? voiceChannel.name : 'Unknown Channel') || 'Unknown Channel';
     } else {
