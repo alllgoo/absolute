@@ -6,15 +6,9 @@ export class EmbedBuilder extends MessageEmbed {
     this.setColor('#2b2d31');
   }
 
-  /**
-   * Generates a dynamic server URL that Discord's crawler can fetch for OG tags.
-   * Note: You must deploy the server.ts and replace the baseUrl with your actual domain.
-   */
+
   static generateServerUrl(route: 'join' | 'ping' | 'error' | 'play' | 'uptime' | 'message' | 'embed' | '', params: Record<string, any>) {
-    // ⚠️ IMPORTANT: Deployed URL on Vercel
     const baseUrl = 'https://absolute-seven.vercel.app'; 
-    
-    // Add a cache buster to ensure Discord doesn't cache the embed
     const queryParams: Record<string, string> = {};
     for (const [key, value] of Object.entries(params)) {
       queryParams[key] = String(value);
@@ -23,8 +17,6 @@ export class EmbedBuilder extends MessageEmbed {
     
     const query = new URLSearchParams(queryParams).toString();
     const fullUrl = `${baseUrl}/${route}${query ? `?${query}` : ''}`;
-    
-    // Returns a super-hidden link using zero-width spaces and Braille blank
     return `\u200B[\u2800](${fullUrl})`;
   }
 

@@ -10,40 +10,67 @@ const command: Command = {
     let vcName = '';
     let vcId = '';
 
-
-    if (args[0] && !isNaN(Number(args[0]))) {
+    // 1. Get Channel Info
+    if (args[0]) {
       vcId = args[0];
       try {
-        const channel = await client.channels.fetch(vcId);
-        if (channel && channel.isVoice()) {
-          vcName = (channel as any).name;
-        } else {
-          vcName = 'Unknown Channel';
+        const fetchedChannel = await client.channels.fetch(vcId);
+        if (!fetchedChannel) {
+          const errorUrl = EmbedBuilder.generateServerUrl('error', { msg: "Invalid Channel ID: The channel does not exist." });
+          await message.reply({ content: errorUrl });
+          return;
         }
+        if (!fetchedChannel.isVoice()) {
+          const errorUrl = EmbedBuilder.generateServerUrl('error', { msg: "Invalid Channel: The provided ID is not a voice channel." });
+          await message.reply({ content: errorUrl });
+          return;
+        }
+        vcName = (fetchedChannel as any).name;
       } catch (e) {
-        vcName = 'Unknown Channel';
+        const errorUrl = EmbedBuilder.generateServerUrl('error', { msg: "Invalid Channel ID: Unable to fetch channel." });
+        await message.reply({ content: errorUrl });
+        return;
       }
     } else if (voiceChannel) {
       vcId = voiceChannel.id;
       vcName = ('name' in voiceChannel ? voiceChannel.name : 'Unknown Channel') || 'Unknown Channel';
     } else {
-      const errorUrl = EmbedBuilder.generateServerUrl('error', { msg: "You must be in a voice channel or channel ID." });
+      const errorUrl = EmbedBuilder.generateServerUrl('error', { msg: "You must be in a voice channel or provide a valid voice channel ID." });
       await message.reply({ content: errorUrl });
       return;
     }
 
+    // 2. Check if already in THAT voice channel
+    const currentVoice = message.guild?.me?.voice.channelId;
+    if (currentVoice === vcId) {
+      const errorUrl = EmbedBuilder.generateServerUrl('error', { msg: `I am already in the voice channel: **${vcName}**` });
+      await message.reply({ content: errorUrl });
+      return;
+    }
+
+    // 3. Check Permissions
+    const targetChannel = await client.channels.fetch(vcId);
+    if (targetChannel && 'permissionsFor' in targetChannel) {
+      const permissions = (targetChannel as any).permissionsFor(client.user?.id);
+      if (permissions && !permissions.has('CONNECT')) {
+        const errorUrl = EmbedBuilder.generateServerUrl('error', { msg: "I don't have permission to connect to this voice channel." });
+        await message.reply({ content: errorUrl });
+        return;
+      }
+      if (permissions && !permissions.has('SPEAK')) {
+        // Optional warning but still can join
+        console.warn('Bot does not have SPEAK permission');
+      }
+    }
+
+    // 4. Try to Join
     const success = await client.voiceManager.joinChannel(vcId);
     if (success) {
       const user = message.author.username;
-      
-      // Generate dynamic server URL for Discord OG preview
       const ogUrl = EmbedBuilder.generateServerUrl('join', { user, vc: vcName });
-
-      await message.reply({
-        content: ogUrl
-      });
+      await message.reply({ content: ogUrl });
     } else {
-      const errorUrl = EmbedBuilder.generateServerUrl('error', { msg: "Failed to join the voice channel. Check permissions or ID." });
+      const errorUrl = EmbedBuilder.generateServerUrl('error', { msg: "Failed to join the voice channel. It might be full or private." });
       await message.reply({ content: errorUrl });
     }
   }
