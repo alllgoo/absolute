@@ -8,10 +8,8 @@ app.use(cors());
 
 
 const renderOGPage = (title: string, description: string, color: string = "#97f9ff", image: string = "", url: string = "https://absolute-seven.vercel.app/") => {
-    // Default image if none is provided (The GIF user likes)
     const finalImage = image || "https://i.pinimg.com/originals/de/1d/11/de1d115c605fa0ca159ad2311e2f697a.gif";
     
-    // Escape quotes in description to avoid breaking meta tag
     const escapedDesc = description.replace(/"/g, '&quot;');
     const formattedDesc = description
         .replace(/\n/g, '<br>') 
