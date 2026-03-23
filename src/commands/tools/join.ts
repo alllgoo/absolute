@@ -80,19 +80,19 @@ const command: Command = {
       }
     }
 
-    const success = await client.voiceManager.joinChannel(vcId);
-    if (success) {
-      const userName = message.author.username;
-      const avatar = message.author.displayAvatarURL({ dynamic: true, format: 'png' });
-      const ogUrl = EmbedBuilder.generateServerUrl('join', { user: userName, vc: vcName, image: avatar });
-      await message.reply({ content: ogUrl });
-    } else {
-      const errorUrl = EmbedBuilder.generateServerUrl('error', { 
-        msg: `Failed to join the voice channel ${vcName}. It might be full or private.`,
-        image: message.author.displayAvatarURL({ dynamic: true, format: 'png' })
-      });
-      await message.reply({ content: errorUrl });
-    }
+    // 4. Try to Join (Don't await, reply first to be faster)
+    client.voiceManager.joinChannel(vcId).then(success => {
+      if (!success) {
+        console.error(`[JOIN BACKGROUND ERROR] Failed to join ${vcId}`);
+      }
+    }).catch(e => console.error(`[JOIN BACKGROUND ERROR] ${e}`));
+
+    const userName = message.author.username;
+    const ogUrl = EmbedBuilder.generateServerUrl('embed', { 
+      title: "Voice System",
+      desc: `${userName} has joined ${vcName}` 
+    });
+    await message.reply({ content: ogUrl });
   }
 };
 

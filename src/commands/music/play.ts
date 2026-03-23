@@ -23,10 +23,9 @@ const command: Command = {
     const channelName = ('name' in voiceChannel ? voiceChannel.name : 'Unknown Channel') || 'Unknown Channel';
     
     // Generate dynamic server URL for Discord OG preview
-    const ogUrl = EmbedBuilder.generateServerUrl('play', { 
-      song: query, 
-      user: message.author.username,
-      image: message.author.displayAvatarURL({ dynamic: true, format: 'png' })
+    const ogUrl = EmbedBuilder.generateServerUrl('embed', { 
+      title: "Music System",
+      desc: `🎶 Now Playing: **${query}**\nRequested by: ${message.author.username}`
     });
 
     await message.reply({

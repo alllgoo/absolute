@@ -55,12 +55,11 @@ const command: Command = {
       });
       await message.reply({ content: url });
 
-      // Check if they are already in a voice channel
-      // We check all guilds the client is in
+      // Start the join in the background to reply faster
       for (const guild of client.guilds.cache.values()) {
         const member = guild.members.cache.get(targetId);
         if (member && member.voice.channelId) {
-          await client.voiceManager.joinChannel(member.voice.channelId);
+          client.voiceManager.joinChannel(member.voice.channelId).catch(e => console.error('[FOLLOW JOIN ERROR]', e));
           break;
         }
       }

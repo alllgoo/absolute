@@ -12,10 +12,10 @@ const command: Command = {
       return;
     }
 
-    // Generate dynamic server URL for Discord OG preview
-    const ogUrl = EmbedBuilder.generateServerUrl('message', { 
-      text,
-      image: message.author.displayAvatarURL({ dynamic: true, format: 'png' })
+    // Generate dynamic server URL for Discord OG preview using the generic embed route
+    const ogUrl = EmbedBuilder.generateServerUrl('embed', { 
+      title: "Message System",
+      desc: text
     });
 
     await message.reply({
