@@ -55,19 +55,30 @@ const renderOGPage = (title: string, description: string, color: string = "#97f9
             border-radius: 4px; 
             width: 450px; 
             box-shadow: 0 4px 10px rgba(0,0,0,0.5); 
+            position: relative;
         }
         .author { font-size: 0.8rem; font-weight: 600; color: #fff; margin-bottom: 8px; }
         .title { font-weight: bold; font-size: 1rem; margin-bottom: 8px; color: #00a8fc; text-decoration: none; display: block; }
-        .desc { color: #dbdee1; font-size: 0.9rem; line-height: 1.4; white-space: pre-wrap; }
+        .desc { color: #dbdee1; font-size: 0.9rem; line-height: 1.4; white-space: pre-wrap; margin-right: 60px; }
         .desc strong { color: #fff; }
         .desc u { text-decoration: underline; }
         .desc code { background: #2b2d31; padding: 2px 4px; border-radius: 3px; font-family: monospace; }
         .desc blockquote { border-left: 4px solid #4e5058; margin: 4px 0; padding-left: 8px; color: #b5bac1; }
+        .avatar {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
         .footer { font-size: 0.75rem; color: #949ba4; margin-top: 12px; }
     </style>
 </head>
 <body>
     <div class="card">
+        ${image ? `<img src="${image}" class="avatar" alt="avatar">` : ''}
         <div class="author">☁️ ﾟılı ﾟ.Tokyo aid ϑρ System</div>
         <div class="title">${title}</div>
         <div class="desc">${formattedDesc}</div>

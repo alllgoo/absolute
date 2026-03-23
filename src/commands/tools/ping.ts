@@ -23,9 +23,8 @@ const command: Command = {
       `Discord API: \`${apiLatency}ms\`\n` +
       `Uptime: \`${formatDuration(uptime)}\`\n`;
 
-    // Generate dynamic server URL for Discord OG preview using the generic embed route
     const ogUrl = EmbedBuilder.generateServerUrl('embed', { 
-      title: '☁️ ﾟılı ﾟ.Tokyo aid ϑρ Performance',
+      title: 'Ghosty Performance',
       desc: description,
       image: message.author.displayAvatarURL({ dynamic: true, format: 'png' })
     });
