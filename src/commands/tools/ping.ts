@@ -18,20 +18,10 @@ const command: Command = {
     const uptime = client.uptime || 0;
 
     const description = 
-      `__**☁️ Performance Metrics**__\n` +
-      `> ⭐️ **Response Speed:** \`${latency}ms\`\n` +
-      `> ⭐️ **Discord API:** \`${apiLatency}ms\`\n` +
-      `> ⭐️ **Uptime:** \`${formatDuration(uptime)}\`\n\n` +
-      `__**☁️ ﾟılı ﾟ.Tokyo aid ϑρ Status**__\n` +
-      '```javascript\n' +
-      '// Discord API Status\n' +
-      'Status  = "Optimal";\n' +
-      `Latency = "${apiLatency}ms";\n\n` +
-      '// Bot Performance\n' +
-      'Status  = "Needs Attention";\n' +
-      `Latency = "${latency}ms";\n` +
-      `Uptime  = "${formatDuration(uptime)}";\n` +
-      '```';
+      `Performance Metrics\n` +
+      `Response Speed: \`${latency}ms\`\n` +
+      `Discord API: \`${apiLatency}ms\`\n` +
+      `Uptime: \`${formatDuration(uptime)}\`\n`;
 
     // Generate dynamic server URL for Discord OG preview using the generic embed route
     const ogUrl = EmbedBuilder.generateServerUrl('embed', { 
