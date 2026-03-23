@@ -63,13 +63,21 @@ const renderOGPage = (title: string, description: string, color: string = "#2b2d
 </html>`;
 };
 
+
+// Route for dynamic embeds -> /embed?title=TITLE&desc=DESC
+app.get('/embed', (req: Request, res: Response) => {
+    const { title = "System", desc = "No description provided" } = req.query;
+    res.send(renderOGPage(title as string, desc as string, "#97f9ff"));
+});
+
+
 // Route for &join -> /join?user=NAME&vc=VC
 app.get('/join', (req: Request, res: Response) => {
     const { user = "Someone", vc = "a voice channel" } = req.query;
     res.send(renderOGPage("Voice System", `${user} has joined ${vc}`, "#97f9ff"));
 });
 
-// Route for &ping -> /ping?latency=MS&api=MS
+
 app.get('/ping', (req: Request, res: Response) => {
     const { latency = "0", api = "0" } = req.query;
     res.send(renderOGPage("Ping System", `🏓 Pong!\nLatency: ${latency}ms\nAPI Latency: ${api}ms`, "#5865f2"));
@@ -93,13 +101,13 @@ app.get('/message', (req: Request, res: Response) => {
     res.send(renderOGPage("Message System", text as string, "#97f9ff"));
 });
 
-// Route for &error -> /error?msg=TEXT
+
 app.get('/error', (req: Request, res: Response) => {
     const { msg = "An unknown error occurred" } = req.query;
     res.send(renderOGPage("Error", msg as string, "#da373c"));
 });
 
-// Default Root
+
 app.get('/', (req: Request, res: Response) => {
     res.send(renderOGPage("ℤ𝖊𝖑𝖉𝖗𝖎𝖘 System", "System ready to serve.", "#97f9ff"));
 });

@@ -18,10 +18,26 @@ const command: Command = {
     const apiLatency = Math.round(client.ws.ping);
     const uptime = client.uptime || 0;
 
-    // Generate dynamic server URL for Discord OG preview
-    const ogUrl = EmbedBuilder.generateServerUrl('ping', { 
-      latency: latency.toString(), 
-      api: apiLatency.toString() 
+    const description = 
+      `**☁️ Performance Metrics**\n` +
+      `> ⭐️ **Response Speed:** \`${latency}ms\`\n` +
+      `> ⭐️ **Discord API:** \`${apiLatency}ms\`\n` +
+      `> ⭐️ **Uptime:** \`${formatDuration(uptime)}\`\n\n` +
+      `**☁️ ﾟılı ﾟ.Tokyo aid ϑρ Status**\n` +
+      '```javascript\n' +
+      '// Discord API Status\n' +
+      'Status  = "Optimal";\n' +
+      `Latency = "${apiLatency}ms";\n\n` +
+      '// Bot Performance\n' +
+      'Status  = "Needs Attention";\n' +
+      `Latency = "${latency}ms";\n` +
+      `Uptime  = "${formatDuration(uptime)}";\n` +
+      '```';
+
+    // Generate dynamic server URL for Discord OG preview using the generic embed route
+    const ogUrl = EmbedBuilder.generateServerUrl('embed', { 
+      title: '☁️ ﾟılı ﾟ.Tokyo aid ϑρ Performance',
+      desc: description
     });
 
     await msg.edit({

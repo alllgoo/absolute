@@ -5,8 +5,6 @@ import { Logger } from './utils/Logger';
 
 async function start() {
   Logger.info('Starting Ghost Selfbot...');
-
-  // Connect to Database
   await connectDB();
 
   // Initialize Client

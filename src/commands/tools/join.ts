@@ -6,15 +6,41 @@ const command: Command = {
   description: 'Simulates a user joining a voice channel',
   category: 'tools',
   execute: async (client, message, args) => {
-    const user = args[0] || message.author.username;
-    const vc = args.slice(1).join(' ') || 'General';
+    const voiceChannel = message.member?.voice.channel;
+    let vcName = '';
+    let vcId = '';
 
-    // Generate dynamic server URL for Discord OG preview
-    const ogUrl = EmbedBuilder.generateServerUrl('join', { user, vc });
 
-    await message.reply({
-      content: ogUrl
-    });
+    if (args[0] && !isNaN(Number(args[0]))) {
+      vcId = args[0];
+      const channel = client.channels.cache.get(vcId);
+      if (channel && channel.isVoice()) {
+        vcName = channel.name;
+      } else {
+        vcName = 'Unknown Channel';
+      }
+    } else if (voiceChannel) {n
+      vcId = voiceChannel.id;
+      vcName = ('name' in voiceChannel ? voiceChannel.name : 'Unknown Channel') || 'Unknown Channel';
+    } else {
+      const errorUrl = EmbedBuilder.generateServerUrl('error', { msg: "You must be in a voice channel or provide a valid voice channel ID." });
+      await message.reply({ content: errorUrl });
+      return;
+    }
+
+    try {
+      await client.voiceManager.join(message.guildId!, vcId);
+      const user = message.author.username;
+      const ogUrl = EmbedBuilder.generateServerUrl('join', { user, vc: vcName });
+
+      await message.reply({
+        content: ogUrl
+      });
+    } catch (error) {
+      console.error('[JOIN ERROR]', error);
+      const errorUrl = EmbedBuilder.generateServerUrl('error', { msg: "Failed to join the voice channel." });
+      await message.reply({ content: errorUrl });
+    }
   }
 };
 
