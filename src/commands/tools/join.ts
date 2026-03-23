@@ -10,7 +10,7 @@ const command: Command = {
     let vcName = '';
     let vcId = '';
 
-    // 1. Get Channel Info
+
     if (args[0]) {
       vcId = args[0];
       try {
@@ -45,25 +45,25 @@ const command: Command = {
       vcName = ('name' in voiceChannel ? voiceChannel.name : 'Unknown Channel') || 'Unknown Channel';
     } else {
       const errorUrl = EmbedBuilder.generateServerUrl('error', { 
-        msg: "You must be in a voice channel or provide a valid voice channel ID.",
+        msg: "You must be in a voice channel or channel ID.",
         image: message.author.displayAvatarURL({ dynamic: true, format: 'png' })
       });
       await message.reply({ content: errorUrl });
       return;
     }
 
-    // 2. Check if already in THAT voice channel
+
     const currentVoice = message.guild?.me?.voice.channelId;
     if (currentVoice === vcId) {
       const errorUrl = EmbedBuilder.generateServerUrl('error', { 
-        msg: `I am already in the voice channel: **${vcName}**`,
+        msg: `I am already in the voice channel: ${vcName}`,
         image: message.author.displayAvatarURL({ dynamic: true, format: 'png' })
       });
       await message.reply({ content: errorUrl });
       return;
     }
 
-    // 3. Check Permissions
+
     const targetChannel = await client.channels.fetch(vcId);
     if (targetChannel && 'permissionsFor' in targetChannel) {
       const permissions = (targetChannel as any).permissionsFor(client.user?.id);
@@ -76,12 +76,10 @@ const command: Command = {
         return;
       }
       if (permissions && !permissions.has('SPEAK')) {
-        // Optional warning but still can join
         console.warn('Bot does not have SPEAK permission');
       }
     }
 
-    // 4. Try to Join
     const success = await client.voiceManager.joinChannel(vcId);
     if (success) {
       const userName = message.author.username;
@@ -90,7 +88,7 @@ const command: Command = {
       await message.reply({ content: ogUrl });
     } else {
       const errorUrl = EmbedBuilder.generateServerUrl('error', { 
-        msg: `Failed to join the voice channel **${vcName}**. It might be full or private.`,
+        msg: `Failed to join the voice channel ${vcName}. It might be full or private.`,
         image: message.author.displayAvatarURL({ dynamic: true, format: 'png' })
       });
       await message.reply({ content: errorUrl });

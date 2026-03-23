@@ -14,6 +14,7 @@ export class GhostClient extends Client {
   public customPresence: PresenceManager;
   public voiceManager: VoiceManager;
   public music: MusicManager;
+  public followedUserId: string | null = null;
 
   constructor(options: ClientOptions) {
     super(options);
