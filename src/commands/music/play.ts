@@ -29,10 +29,7 @@ const command: Command = {
     });
 
     const response = 
-      `${ogUrl}\n\n` +
-      `**☁️ ﾟılı ﾟ.Tokyo aid ϑρ Music**\n\n` +
-      `> 🎶 **Now Playing:** \`${query}\`\n` +
-      `> 📻 **Channel:** \`${channelName}\`\n\n` +
+      `${ogUrl}\n` +
       `*☁️ ﾟılı ﾟ.Tokyo aid ϑρ is ready to serve*`;
 
     await message.reply({

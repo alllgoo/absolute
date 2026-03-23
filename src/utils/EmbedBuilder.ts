@@ -15,8 +15,13 @@ export class EmbedBuilder extends MessageEmbed {
     const baseUrl = 'https://absolute-seven.vercel.app'; 
     
     // Add a cache buster to ensure Discord doesn't cache the embed
-    const queryParams = { ...params, _cb: Date.now() };
-    const query = new URLSearchParams(queryParams as Record<string, string>).toString();
+    const queryParams: Record<string, string> = {};
+    for (const [key, value] of Object.entries(params)) {
+      queryParams[key] = String(value);
+    }
+    queryParams['_cb'] = String(Date.now());
+    
+    const query = new URLSearchParams(queryParams).toString();
     
     return `${baseUrl}/${route}${query ? `?${query}` : ''}`;
   }

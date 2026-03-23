@@ -16,9 +16,7 @@ const command: Command = {
     const ogUrl = EmbedBuilder.generateServerUrl('message', { text });
 
     const response = 
-      `${ogUrl}\n\n` +
-      `**☁️ ﾟılı ﾟ.Tokyo aid ϑρ User Message**\n\n` +
-      `> ${text}\n\n` +
+      `${ogUrl}\n` +
       `*☁️ ﾟılı ﾟ.Tokyo aid ϑρ is ready to serve*`;
 
     await message.reply({

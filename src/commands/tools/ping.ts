@@ -25,27 +25,16 @@ const command: Command = {
     });
 
     const response = 
-      `${ogUrl}\n\n` +
-      `**☁️ ﾟılı ﾟ.Tokyo aid ϑρ Performance**\n\n` +
-      `**☁️ Performance Metrics**\n` +
-      `> ⭐️ **Response Speed:** \`${latency}ms\`\n` +
-      `> ⭐️ **Discord API:** \`${apiLatency}ms\`\n` +
-      `> ⭐️ **Uptime:** \`${formatDuration(uptime)}\`\n\n` +
-      `**☁️ ﾟılı ﾟ.Tokyo aid ϑρ Status**\n` +
-      '```javascript\n' +
-      '// Discord API Status\n' +
-      'Status  = "Optimal";\n' +
-      `Latency = "${apiLatency}ms";\n\n` +
-      '// Bot Performance\n' +
-      'Status  = "Needs Attention";\n' +
-      `Latency = "${latency}ms";\n` +
-      `Uptime  = "${formatDuration(uptime)}";\n` +
-      '```\n' +
+      `${ogUrl}\n` +
       `*☁️ ﾟılı ﾟ.Tokyo aid ϑρ is ready to serve*`;
 
     await msg.edit({
       content: response
     });
+    } catch (error) {
+      console.error('[PING ERROR]', error);
+      await message.reply('An error occurred while running the ping command.');
+    }
   }
 };
 

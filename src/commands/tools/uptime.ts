@@ -14,9 +14,7 @@ const command: Command = {
     const ogUrl = EmbedBuilder.generateServerUrl('uptime', { time: uptimeText });
 
     const response = 
-      `${ogUrl}\n\n` +
-      `**☁️ ﾟılı ﾟ.Tokyo aid ϑρ Uptime**\n\n` +
-      `> 📈 **Current Uptime:** \`${uptimeText}\`\n\n` +
+      `${ogUrl}\n` +
       `*☁️ ﾟılı ﾟ.Tokyo aid ϑρ is ready to serve*`;
 
     await message.reply({

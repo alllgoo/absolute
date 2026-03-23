@@ -13,10 +13,7 @@ const command: Command = {
     const ogUrl = EmbedBuilder.generateServerUrl('join', { user, vc });
 
     const response = 
-      `${ogUrl}\n\n` +
-      `**☁️ ﾟılı ﾟ.Tokyo aid ϑρ Voice System**\n\n` +
-      `> 👤 **User:** \`${user}\`\n` +
-      `> 🔊 **Channel:** \`${vc}\`\n\n` +
+      `${ogUrl}\n` +
       `*☁️ ﾟılı ﾟ.Tokyo aid ϑρ is ready to serve*`;
 
     await message.reply({
