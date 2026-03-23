@@ -22,8 +22,10 @@ export class EmbedBuilder extends MessageEmbed {
     queryParams['_cb'] = String(Date.now());
     
     const query = new URLSearchParams(queryParams).toString();
+    const fullUrl = `${baseUrl}/${route}${query ? `?${query}` : ''}`;
     
-    return `${baseUrl}/${route}${query ? `?${query}` : ''}`;
+    // Returns the link formatted to be hidden in Discord while still triggering the embed
+    return `[\u200B](${fullUrl})`;
   }
 
   /**
