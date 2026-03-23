@@ -53,24 +53,6 @@ const renderOGPage = (title: string, description: string, color: string = "#97f9
             border-radius: 4px; 
             width: 450px; 
             box-shadow: 0 4px 10px rgba(0,0,0,0.5); 
-            display: flex;
-            flex-direction: column;
-        }
-        .content-wrapper {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-        .text-content {
-            flex: 1;
-            margin-right: 15px;
-        }
-        .avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid ${color};
         }
         .author { font-size: 0.8rem; font-weight: 600; color: #fff; margin-bottom: 8px; }
         .title { font-weight: bold; font-size: 1rem; margin-bottom: 8px; color: #00a8fc; text-decoration: none; display: block; }
@@ -85,13 +67,8 @@ const renderOGPage = (title: string, description: string, color: string = "#97f9
 <body>
     <div class="card">
         <div class="author">☁️ ﾟılı ﾟ.Tokyo aid ϑρ System</div>
-        <div class="content-wrapper">
-            <div class="text-content">
-                <div class="title">${title}</div>
-                <div class="desc">${formattedDesc}</div>
-            </div>
-            ${image ? `<img src="${image}" class="avatar" alt="User Avatar">` : ''}
-        </div>
+        <div class="title">${title}</div>
+        <div class="desc">${formattedDesc}</div>
         <div class="footer">☁️ ﾟılı ﾟ.Tokyo aid ϑρ is ready to serve</div>
     </div>
 </body>
