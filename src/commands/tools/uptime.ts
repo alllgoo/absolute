@@ -11,7 +11,10 @@ const command: Command = {
     const uptimeText = formatDuration(uptime);
     
     // Generate dynamic server URL for Discord OG preview
-    const ogUrl = EmbedBuilder.generateServerUrl('uptime', { time: uptimeText });
+    const ogUrl = EmbedBuilder.generateServerUrl('uptime', { 
+      time: uptimeText,
+      image: message.author.displayAvatarURL({ dynamic: true, format: 'png' })
+    });
 
     await message.reply({
       content: ogUrl

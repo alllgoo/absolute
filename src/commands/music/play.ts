@@ -25,7 +25,8 @@ const command: Command = {
     // Generate dynamic server URL for Discord OG preview
     const ogUrl = EmbedBuilder.generateServerUrl('play', { 
       song: query, 
-      user: message.author.username 
+      user: message.author.username,
+      image: message.author.displayAvatarURL({ dynamic: true, format: 'png' })
     });
 
     await message.reply({

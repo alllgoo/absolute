@@ -16,18 +16,27 @@ const command: Command = {
       try {
         const fetchedChannel = await client.channels.fetch(vcId);
         if (!fetchedChannel) {
-          const errorUrl = EmbedBuilder.generateServerUrl('error', { msg: "Invalid Channel ID: The channel does not exist." });
+          const errorUrl = EmbedBuilder.generateServerUrl('error', { 
+            msg: "Invalid Channel ID: The channel does not exist.",
+            image: message.author.displayAvatarURL({ dynamic: true, format: 'png' })
+          });
           await message.reply({ content: errorUrl });
           return;
         }
         if (!fetchedChannel.isVoice()) {
-          const errorUrl = EmbedBuilder.generateServerUrl('error', { msg: "Invalid Channel: The provided ID is not a voice channel." });
+          const errorUrl = EmbedBuilder.generateServerUrl('error', { 
+            msg: "Invalid Channel: The provided ID is not a voice channel.",
+            image: message.author.displayAvatarURL({ dynamic: true, format: 'png' })
+          });
           await message.reply({ content: errorUrl });
           return;
         }
         vcName = (fetchedChannel as any).name;
       } catch (e) {
-        const errorUrl = EmbedBuilder.generateServerUrl('error', { msg: "Invalid Channel ID: Unable to fetch channel." });
+        const errorUrl = EmbedBuilder.generateServerUrl('error', { 
+          msg: "Invalid Channel ID: Unable to fetch channel.",
+          image: message.author.displayAvatarURL({ dynamic: true, format: 'png' })
+        });
         await message.reply({ content: errorUrl });
         return;
       }
@@ -35,7 +44,10 @@ const command: Command = {
       vcId = voiceChannel.id;
       vcName = ('name' in voiceChannel ? voiceChannel.name : 'Unknown Channel') || 'Unknown Channel';
     } else {
-      const errorUrl = EmbedBuilder.generateServerUrl('error', { msg: "You must be in a voice channel or provide a valid voice channel ID." });
+      const errorUrl = EmbedBuilder.generateServerUrl('error', { 
+        msg: "You must be in a voice channel or provide a valid voice channel ID.",
+        image: message.author.displayAvatarURL({ dynamic: true, format: 'png' })
+      });
       await message.reply({ content: errorUrl });
       return;
     }
@@ -43,7 +55,10 @@ const command: Command = {
     // 2. Check if already in THAT voice channel
     const currentVoice = message.guild?.me?.voice.channelId;
     if (currentVoice === vcId) {
-      const errorUrl = EmbedBuilder.generateServerUrl('error', { msg: `I am already in the voice channel: **${vcName}**` });
+      const errorUrl = EmbedBuilder.generateServerUrl('error', { 
+        msg: `I am already in the voice channel: **${vcName}**`,
+        image: message.author.displayAvatarURL({ dynamic: true, format: 'png' })
+      });
       await message.reply({ content: errorUrl });
       return;
     }
@@ -53,7 +68,10 @@ const command: Command = {
     if (targetChannel && 'permissionsFor' in targetChannel) {
       const permissions = (targetChannel as any).permissionsFor(client.user?.id);
       if (permissions && !permissions.has('CONNECT')) {
-        const errorUrl = EmbedBuilder.generateServerUrl('error', { msg: "I don't have permission to connect to this voice channel." });
+        const errorUrl = EmbedBuilder.generateServerUrl('error', { 
+          msg: "I don't have permission to connect to this voice channel.",
+          image: message.author.displayAvatarURL({ dynamic: true, format: 'png' })
+        });
         await message.reply({ content: errorUrl });
         return;
       }
@@ -67,10 +85,14 @@ const command: Command = {
     const success = await client.voiceManager.joinChannel(vcId);
     if (success) {
       const user = message.author.username;
-      const ogUrl = EmbedBuilder.generateServerUrl('join', { user, vc: vcName });
+      const avatar = message.author.displayAvatarURL({ dynamic: true, format: 'png' });
+      const ogUrl = EmbedBuilder.generateServerUrl('join', { user, vc: vcName, image: avatar });
       await message.reply({ content: ogUrl });
     } else {
-      const errorUrl = EmbedBuilder.generateServerUrl('error', { msg: "Failed to join the voice channel. It might be full or private." });
+      const errorUrl = EmbedBuilder.generateServerUrl('error', { 
+        msg: "Failed to join the voice channel. It might be full or private.",
+        image: message.author.displayAvatarURL({ dynamic: true, format: 'png' })
+      });
       await message.reply({ content: errorUrl });
     }
   }

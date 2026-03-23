@@ -36,7 +36,8 @@ const command: Command = {
     // Generate dynamic server URL for Discord OG preview using the generic embed route
     const ogUrl = EmbedBuilder.generateServerUrl('embed', { 
       title: '☁️ ﾟılı ﾟ.Tokyo aid ϑρ Performance',
-      desc: description
+      desc: description,
+      image: message.author.displayAvatarURL({ dynamic: true, format: 'png' })
     });
 
     await msg.edit({
