@@ -55,7 +55,7 @@ const renderOGPage = (title: string, description: string, color: string = "#2b2d
 <body>
     <div class="card">
         <div class="author">☁️ ﾟılı ﾟ.Tokyo aid ϑρ System</div>
-        <a href="https://zeldris44.vercel.app/" class="title">${title}</a>
+        <div class="title">${title}</div>
         <div class="desc">${description}</div>
         <div class="footer">☁️ ﾟılı ﾟ.Tokyo aid ϑρ is ready to serve</div>
     </div>
