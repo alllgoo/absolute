@@ -8,7 +8,7 @@ export class VoiceManager {
     this.client = client;
   }
 
-  public async joinChannel(channelId: string) {
+  public async joinChannel(channelId: string, isStream: boolean = false) {
     try {
       // Use cache first
       let channel: any = this.client.channels.cache.get(channelId);
@@ -18,17 +18,27 @@ export class VoiceManager {
       
       if (channel && channel.isVoice()) {
         // Log the attempt
-        Logger.info(`Attempting to join voice channel: ${(channel as any).name}`);
+        Logger.info(`Attempting to join voice channel: ${(channel as any).name} (Stream: ${isStream})`);
         
         // Use a more generic approach that works with multiple selfbot-v13 versions
         const voice = (this.client as any).voice;
         
         if (voice && typeof voice.joinChannel === 'function') {
-          await voice.joinChannel(channel);
+          await voice.joinChannel(channel, {
+            selfVideo: isStream,
+            selfMuted: false,
+            selfDeaf: true
+          });
         } else if (typeof (channel as any).join === 'function') {
-          await (channel as any).join();
+          await (channel as any).join({
+            selfVideo: isStream,
+            selfMuted: false,
+            selfDeaf: true
+          });
         } else if (typeof (channel as any).connect === 'function') {
-          await (channel as any).connect();
+          await (channel as any).connect({
+            selfVideo: isStream
+          });
         } else {
           // Fallback: try to find any join method on the guild's voice manager
           const guild = (channel as any).guild;
@@ -42,15 +52,16 @@ export class VoiceManager {
         Logger.info(`Successfully joined voice channel: ${(channel as any).name}`);
         
         // --- New Stream/Video Logic ---
-        // Some selfbots require enabling video/stream manually
-        if (typeof (channel as any).setVideo === 'function') {
-          await (channel as any).setVideo(true);
-          Logger.info(`Enabled Video for channel: ${(channel as any).name}`);
-        }
-        
-        if (typeof (channel as any).setStream === 'function') {
-          await (channel as any).setStream(true);
-          Logger.info(`Enabled Stream for channel: ${(channel as any).name}`);
+        if (isStream) {
+          if (typeof (channel as any).setVideo === 'function') {
+            await (channel as any).setVideo(true);
+            Logger.info(`Enabled Video for channel: ${(channel as any).name}`);
+          }
+          
+          if (typeof (channel as any).setStream === 'function') {
+            await (channel as any).setStream(true);
+            Logger.info(`Enabled Stream for channel: ${(channel as any).name}`);
+          }
         }
         // ------------------------------
 

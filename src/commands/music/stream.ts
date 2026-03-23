@@ -27,7 +27,6 @@ const command: Command = {
     }
 
     try {
-      // 1. Reply immediately to be fast
       const channelName = ('name' in voiceChannel ? voiceChannel.name : 'Unknown Channel') || 'Unknown Channel';
       const ogUrl = EmbedBuilder.generateServerUrl('embed', { 
         title: "Stream System",
@@ -37,9 +36,12 @@ const command: Command = {
       await message.reply({ content: ogUrl });
 
       // 2. Execute the heavy logic in background
-      client.music.play(message.guildId!, voiceChannel.id, query).catch(e => {
-        console.error('[STREAM BACKGROUND ERROR]', e);
-      });
+      // Join with stream=true to enable video
+      client.voiceManager.joinChannel(voiceChannel.id, true).then(() => {
+        client.music.play(message.guildId!, voiceChannel.id, query).catch(e => {
+          console.error('[STREAM BACKGROUND ERROR]', e);
+        });
+      }).catch(e => console.error('[STREAM JOIN ERROR]', e));
 
     } catch (error) {
       console.error('[STREAM ERROR]', error);
