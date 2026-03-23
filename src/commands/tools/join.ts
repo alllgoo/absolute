@@ -29,7 +29,7 @@ const command: Command = {
     }
 
     try {
-      await client.voiceManager.join(message.guildId!, vcId);
+      await client.voiceManager.joinChannel(vcId);
       const user = message.author.username;
       const ogUrl = EmbedBuilder.generateServerUrl('join', { user, vc: vcName });
 
