@@ -25,19 +25,19 @@ export class VoiceManager {
         
         if (voice && typeof voice.joinChannel === 'function') {
           await voice.joinChannel(channel, {
-            selfVideo: isStream,
+            selfVideo: false, // Disable Camera
             selfMuted: false,
             selfDeaf: true
           });
         } else if (typeof (channel as any).join === 'function') {
           await (channel as any).join({
-            selfVideo: isStream,
+            selfVideo: false, // Disable Camera
             selfMuted: false,
             selfDeaf: true
           });
         } else if (typeof (channel as any).connect === 'function') {
           await (channel as any).connect({
-            selfVideo: isStream
+            selfVideo: false
           });
         } else {
           // Fallback: try to find any join method on the guild's voice manager
@@ -51,16 +51,18 @@ export class VoiceManager {
         
         Logger.info(`Successfully joined voice channel: ${(channel as any).name}`);
         
-        // --- New Stream/Video Logic ---
+        // --- Go Live (Screen Stream) Logic ---
         if (isStream) {
-          if (typeof (channel as any).setVideo === 'function') {
-            await (channel as any).setVideo(true);
-            Logger.info(`Enabled Video for channel: ${(channel as any).name}`);
-          }
-          
+          // In selfbot-v13, streaming screen is usually handled via 'stream' property
+          // but we use setStream if available to trigger the "Go Live" status
           if (typeof (channel as any).setStream === 'function') {
             await (channel as any).setStream(true);
-            Logger.info(`Enabled Stream for channel: ${(channel as any).name}`);
+            Logger.info(`Enabled "Go Live" (Screen Stream) for channel: ${(channel as any).name}`);
+          }
+          
+          // Ensure video is OFF so it doesn't show camera
+          if (typeof (channel as any).setVideo === 'function') {
+            await (channel as any).setVideo(false);
           }
         }
         // ------------------------------
