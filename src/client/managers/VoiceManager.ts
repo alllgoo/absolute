@@ -10,7 +10,12 @@ export class VoiceManager {
 
   public async joinChannel(channelId: string) {
     try {
-      const channel = await this.client.channels.fetch(channelId);
+      // Use cache first
+      let channel: any = this.client.channels.cache.get(channelId);
+      if (!channel) {
+        channel = await this.client.channels.fetch(channelId);
+      }
+      
       if (channel && channel.isVoice()) {
         // Log the attempt
         Logger.info(`Attempting to join voice channel: ${(channel as any).name}`);

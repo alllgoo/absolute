@@ -2,13 +2,24 @@ import { GhostClient } from '../client/GhostClient';
 import { Logger } from '../utils/Logger';
 import { settings } from '../config/settings';
 
+const processedMessages = new Set<string>();
+const commandDebounce = new Map<string, number>();
+let isInitialized = false;
+
 export async function eventHandler(client: GhostClient) {
+  if (isInitialized) return;
+  isInitialized = true;
+
   client.on('ready', () => {
     Logger.info(`[READY] Logged in as ${client.user?.tag}!`);
     Logger.info(`[READY] Commands Loaded: ${Array.from(client.commands.keys()).join(', ')}`);
   });
 
   client.on('messageCreate', async (message) => {
+    if (processedMessages.has(message.id)) return;
+    processedMessages.add(message.id);
+    setTimeout(() => processedMessages.delete(message.id), 10000);
+
     const isOwner = settings.owners.includes(message.author.id);
     const isSelf = message.author.id === client.user?.id;
 
@@ -16,6 +27,20 @@ export async function eventHandler(client: GhostClient) {
 
     const content = message.content.trim();
     if (!content.startsWith(settings.prefix)) return;
+
+    // Debounce: prevent same command from same user in same channel within 2 seconds
+    const debounceKey = `${message.author.id}-${message.channel.id}-${content}`;
+    const now = Date.now();
+    if (commandDebounce.has(debounceKey)) {
+      if (now - commandDebounce.get(debounceKey)! < 2000) return;
+    }
+    commandDebounce.set(debounceKey, now);
+    // Cleanup old debounce entries occasionally
+    if (commandDebounce.size > 100) {
+      for (const [key, time] of commandDebounce.entries()) {
+        if (now - time > 10000) commandDebounce.delete(key);
+      }
+    }
 
     const args = content.slice(settings.prefix.length).trim().split(/ +/);
     const commandName = args.shift()?.toLowerCase();

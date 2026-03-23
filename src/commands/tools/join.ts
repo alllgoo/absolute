@@ -14,7 +14,12 @@ const command: Command = {
     if (args[0]) {
       vcId = args[0];
       try {
-        const fetchedChannel = await client.channels.fetch(vcId);
+        // Try cache first for speed
+        let fetchedChannel: any = client.channels.cache.get(vcId);
+        if (!fetchedChannel) {
+          fetchedChannel = await client.channels.fetch(vcId);
+        }
+        
         if (!fetchedChannel) {
           const errorUrl = EmbedBuilder.generateServerUrl('error', { 
             msg: "Invalid Channel ID: The channel does not exist.",

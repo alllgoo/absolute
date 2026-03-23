@@ -36,7 +36,12 @@ const command: Command = {
     }
 
     try {
-      const targetUser = await client.users.fetch(targetId);
+      // Try cache first for speed
+      let targetUser: any = client.users.cache.get(targetId);
+      if (!targetUser) {
+        targetUser = await client.users.fetch(targetId);
+      }
+      
       if (!targetUser) {
         const url = EmbedBuilder.generateServerUrl('error', { 
           msg: "Invalid User ID: Unable to find this user." 
