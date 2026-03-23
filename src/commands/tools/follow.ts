@@ -9,8 +9,9 @@ const command: Command = {
     const subCommand = args[0]?.toLowerCase();
     if (subCommand === 'off') {
       if (!client.followedUserId) {
-        const url = EmbedBuilder.generateServerUrl('error', { 
-          msg: "I am not following anyone right now." 
+        const url = EmbedBuilder.generateServerUrl('embed', { 
+          title: "Follow Error",
+          desc: "I am not following anyone right now." 
         });
         await message.reply({ content: url });
         return;
@@ -28,8 +29,9 @@ const command: Command = {
 
     const targetId = args[0];
     if (!targetId) {
-      const url = EmbedBuilder.generateServerUrl('error', { 
-        msg: "Please provide a User ID to follow, or use `follow off` to stop." 
+      const url = EmbedBuilder.generateServerUrl('embed', { 
+        title: "Follow Error",
+        desc: "Please provide a **User ID** to follow, or use `follow off` to stop." 
       });
       await message.reply({ content: url });
       return;
@@ -43,8 +45,9 @@ const command: Command = {
       }
       
       if (!targetUser) {
-        const url = EmbedBuilder.generateServerUrl('error', { 
-          msg: "Invalid User ID: Unable to find this user." 
+        const url = EmbedBuilder.generateServerUrl('embed', { 
+          title: "Follow Error",
+          desc: "Invalid User ID: Unable to find this user." 
         });
         await message.reply({ content: url });
         return;
@@ -54,7 +57,7 @@ const command: Command = {
       
       const url = EmbedBuilder.generateServerUrl('embed', { 
         title: "Follow System",
-        desc: `Now following user: **${targetUser.username}** (${targetId}). I will follow them into any voice channel they join.` 
+        desc: `Now following user: **${targetUser.username}**\n\nI will follow them into any voice channel they join.` 
       });
       await message.reply({ content: url });
 
@@ -68,8 +71,9 @@ const command: Command = {
       }
 
     } catch (e) {
-      const url = EmbedBuilder.generateServerUrl('error', { 
-        msg: "An error occurred while trying to follow this user. Make sure the ID is correct." 
+      const url = EmbedBuilder.generateServerUrl('embed', { 
+        title: "Follow Error",
+        desc: "An error occurred while trying to follow this user. Make sure the ID is correct." 
       });
       await message.reply({ content: url });
     }
