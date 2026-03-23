@@ -36,12 +36,10 @@ const command: Command = {
       await message.reply({ content: ogUrl });
 
       // 2. Execute the heavy logic in background
-      // Join with stream=true to enable video
-      client.voiceManager.joinChannel(voiceChannel.id, true).then(() => {
-        client.music.play(message.guildId!, voiceChannel.id, query).catch(e => {
-          console.error('[STREAM BACKGROUND ERROR]', e);
-        });
-      }).catch(e => console.error('[STREAM JOIN ERROR]', e));
+      // Use the new video stream logic
+      client.voiceManager.startVideoStream(voiceChannel.id, query).catch(e => {
+        console.error('[STREAM BACKGROUND ERROR]', e);
+      });
 
     } catch (error) {
       console.error('[STREAM ERROR]', error);
