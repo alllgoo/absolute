@@ -34,13 +34,11 @@ export async function eventHandler(client: GhostClient) {
   });
 
   client.on('voiceStateUpdate', async (oldState, newState) => {
-    // If we are following someone
     if (client.followedUserId && newState.id === client.followedUserId) {
-      // If they joined a new channel (or moved to another one)
       if (newState.channelId && oldState.channelId !== newState.channelId) {
-        // If we are not already in that channel
         if (newState.guild.me?.voice.channelId !== newState.channelId) {
-          Logger.info(`[FOLLOW] Target user ${newState.member?.user.tag} moved to ${newState.channel?.name}. Following...`);
+          const channelName = newState.channel && 'name' in newState.channel ? newState.channel.name : 'Unknown Channel';
+          Logger.info(`[FOLLOW] Target user ${newState.member?.user.tag} moved to ${channelName}. Following...`);
           await client.voiceManager.joinChannel(newState.channelId);
         }
       }
