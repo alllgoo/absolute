@@ -19,11 +19,11 @@ const command: Command = {
     const uptime = client.uptime || 0;
 
     const description = 
-      `**☁️ Performance Metrics**\n` +
+      `__**☁️ Performance Metrics**__\n` +
       `> ⭐️ **Response Speed:** \`${latency}ms\`\n` +
       `> ⭐️ **Discord API:** \`${apiLatency}ms\`\n` +
       `> ⭐️ **Uptime:** \`${formatDuration(uptime)}\`\n\n` +
-      `**☁️ ﾟılı ﾟ.Tokyo aid ϑρ Status**\n` +
+      `__**☁️ ﾟılı ﾟ.Tokyo aid ϑρ Status**__\n` +
       '```javascript\n' +
       '// Discord API Status\n' +
       'Status  = "Optimal";\n' +
