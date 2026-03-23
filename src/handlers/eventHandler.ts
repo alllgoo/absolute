@@ -16,10 +16,11 @@ export async function eventHandler(client: GhostClient) {
   });
 
   client.on('messageCreate', async (message) => {
-    // 1. Instant check for duplicates to prevent parallel execution issues
-    if (processedMessages.has(message.id)) return;
+    if (processedMessages.has(message.id)) {
+      return;
+    }
     processedMessages.add(message.id);
-    setTimeout(() => processedMessages.delete(message.id), 30000); // Keep for 30s to be safe
+    setTimeout(() => processedMessages.delete(message.id), 30000); 
 
     const isOwner = settings.owners.includes(message.author.id);
     const isSelf = message.author.id === client.user?.id;
@@ -29,7 +30,7 @@ export async function eventHandler(client: GhostClient) {
     const content = message.content.trim();
     if (!content.startsWith(settings.prefix)) return;
 
-    Logger.info(`[MESSAGE] Received: "${content}" from ${message.author.tag}`);
+    Logger.info(`[PID:${process.pid}] MESSAGE RECEIVED: "${content}" from ${message.author.tag}`);
 
     const debounceKey = `${message.author.id}-${message.channel.id}-${content}`;
     const now = Date.now();

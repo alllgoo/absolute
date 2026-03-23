@@ -20,7 +20,7 @@ async function start() {
 
   // Prevent multiple local instances if running in terminal
   console.clear();
-  Logger.info(`[SYSTEM] Starting Client Instance...`);
+  Logger.info(`[SYSTEM] Starting Client Instance (PID: ${process.pid})...`);
   Logger.info(`[SYSTEM] If you see double replies, please check if another terminal or process is running the bot.`);
 
   await client.start(token);
