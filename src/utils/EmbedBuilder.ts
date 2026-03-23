@@ -11,8 +11,8 @@ export class EmbedBuilder extends MessageEmbed {
    * Note: You must deploy the server.ts and replace the baseUrl with your actual domain.
    */
   static generateServerUrl(route: 'join' | 'ping' | 'error' | 'play' | 'uptime' | 'message' | '', params: Record<string, any>) {
-    // ⚠️ IMPORTANT: Replace this with your actual deployed URL (e.g., https://tokyo-aid-og.vercel.app)
-    const baseUrl = 'https://REPLACE-WITH-YOUR-VERCEL-URL.vercel.app'; 
+    // ⚠️ IMPORTANT: Deployed URL on Vercel
+    const baseUrl = 'https://absolute-seven.vercel.app'; 
     
     // Add a cache buster to ensure Discord doesn't cache the embed
     const queryParams = { ...params, _cb: Date.now() };
