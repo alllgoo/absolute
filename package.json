@@ -1,0 +1,34 @@
+{
+  "name": "selfbot-all-in-one",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/ghost.ts",
+  "scripts": {
+    "start": "ts-node src/ghost.ts",
+    "dev": "ts-node src/ghost.ts",
+    "server": "ts-node src/server.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "axios": "^1.13.6",
+    "cors": "^2.8.6",
+    "debug": "^4.4.3",
+    "discord.js-selfbot-v13": "^3.7.1",
+    "dotenv": "^17.3.1",
+    "erela.js": "^2.4.0",
+    "express": "^5.2.1",
+    "mongoose": "^9.3.1",
+    "winston": "^3.19.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "@types/ws": "^8.18.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
