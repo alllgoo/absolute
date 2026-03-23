@@ -22,21 +22,22 @@ export class VoiceManager {
         
         // Use a more generic approach that works with multiple selfbot-v13 versions
         const voice = (this.client as any).voice;
+        let connection: any;
         
         if (voice && typeof voice.joinChannel === 'function') {
-          await voice.joinChannel(channel, {
+          connection = await voice.joinChannel(channel, {
             selfVideo: false, // Disable Camera
             selfMuted: false,
             selfDeaf: true
           });
         } else if (typeof (channel as any).join === 'function') {
-          await (channel as any).join({
+          connection = await (channel as any).join({
             selfVideo: false, // Disable Camera
             selfMuted: false,
             selfDeaf: true
           });
         } else if (typeof (channel as any).connect === 'function') {
-          await (channel as any).connect({
+          connection = await (channel as any).connect({
             selfVideo: false
           });
         } else {
@@ -52,17 +53,14 @@ export class VoiceManager {
         Logger.info(`Successfully joined voice channel: ${(channel as any).name}`);
         
         // --- Go Live (Screen Stream) Logic ---
-        if (isStream) {
-          // In selfbot-v13, streaming screen is usually handled via 'stream' property
-          // but we use setStream if available to trigger the "Go Live" status
-          if (typeof (channel as any).setStream === 'function') {
+        if (isStream && connection) {
+          // In selfbot-v13, "Go Live" is enabled on the connection object
+          if (typeof connection.setStream === 'function') {
+            await connection.setStream(true);
+            Logger.info(`Enabled "Go Live" (Screen Stream) via connection for channel: ${(channel as any).name}`);
+          } else if (typeof (channel as any).setStream === 'function') {
             await (channel as any).setStream(true);
-            Logger.info(`Enabled "Go Live" (Screen Stream) for channel: ${(channel as any).name}`);
-          }
-          
-          // Ensure video is OFF so it doesn't show camera
-          if (typeof (channel as any).setVideo === 'function') {
-            await (channel as any).setVideo(false);
+            Logger.info(`Enabled "Go Live" (Screen Stream) via channel for channel: ${(channel as any).name}`);
           }
         }
         // ------------------------------
