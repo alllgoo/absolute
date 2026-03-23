@@ -18,6 +18,7 @@ export class GhostClient extends Client {
 
   constructor(options: ClientOptions) {
     super(options);
+    Logger.info(`[CLIENT] Initializing new GhostClient instance...`);
     this.activity = new ActivityManager(this);
     this.customPresence = new PresenceManager(this);
     this.voiceManager = new VoiceManager(this);

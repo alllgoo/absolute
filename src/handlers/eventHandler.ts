@@ -34,7 +34,10 @@ export async function eventHandler(client: GhostClient) {
     const debounceKey = `${message.author.id}-${message.channel.id}-${content}`;
     const now = Date.now();
     if (commandDebounce.has(debounceKey)) {
-      if (now - commandDebounce.get(debounceKey)! < 2000) return;
+      if (now - commandDebounce.get(debounceKey)! < 1500) {
+        Logger.info(`[DEBOUNCE] Blocked repeat command: ${content}`);
+        return;
+      }
     }
     commandDebounce.set(debounceKey, now);
     if (commandDebounce.size > 100) {
