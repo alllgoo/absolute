@@ -18,6 +18,11 @@ async function start() {
     process.exit(1);
   }
 
+  // Prevent multiple local instances if running in terminal
+  console.clear();
+  Logger.info(`[SYSTEM] Starting Client Instance...`);
+  Logger.info(`[SYSTEM] If you see double replies, please check if another terminal or process is running the bot.`);
+
   await client.start(token);
 }
 

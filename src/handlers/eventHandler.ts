@@ -16,15 +16,15 @@ export async function eventHandler(client: GhostClient) {
   });
 
   client.on('messageCreate', async (message) => {
+    // 1. Instant check for duplicates to prevent parallel execution issues
+    if (processedMessages.has(message.id)) return;
+    processedMessages.add(message.id);
+    setTimeout(() => processedMessages.delete(message.id), 30000); // Keep for 30s to be safe
 
     const isOwner = settings.owners.includes(message.author.id);
     const isSelf = message.author.id === client.user?.id;
 
     if (!isSelf && !isOwner) return;
-
-    if (processedMessages.has(message.id)) return;
-    processedMessages.add(message.id);
-    setTimeout(() => processedMessages.delete(message.id), 10000);
 
     const content = message.content.trim();
     if (!content.startsWith(settings.prefix)) return;
