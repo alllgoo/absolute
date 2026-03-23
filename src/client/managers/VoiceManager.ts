@@ -1,15 +1,11 @@
 import { GhostClient } from '../GhostClient';
 import { Logger } from '../../utils/Logger';
-import { StreamVideo, setFfmpegPath } from '@dank074/discord-video-stream';
-import { path as ffmpegPath } from '@ffmpeg-installer/ffmpeg';
+import { Streamer, prepareStream, playStream } from '@dank074/discord-video-stream';
 import play from 'play-dl';
-
-// Set FFmpeg path for the library
-setFfmpegPath(ffmpegPath);
 
 export class VoiceManager {
   private client: GhostClient;
-  private streamer: any = null;
+  private streamer: Streamer | null = null;
 
   constructor(client: GhostClient) {
     this.client = client;
@@ -24,22 +20,27 @@ export class VoiceManager {
 
       // 1. Initialize Streamer if not exists
       if (!this.streamer) {
-        this.streamer = new StreamVideo(this.client);
+        this.streamer = new Streamer(this.client);
       }
 
-      // 2. Join and Get Voice Connection via the library
+      // 2. Join Voice via the library
       await this.streamer.joinVoice(guildId, channelId);
       Logger.info(`[STREAM] Joined voice channel for streaming: ${channel.name}`);
 
       // 3. Extract Stream using play-dl
-      const streamInfo = await play.stream(query, { quality: 2 }); // High quality
+      const streamInfo = await play.stream(query, { quality: 2 });
       
-      // 4. Start Playing Video
-      const udp = await this.streamer.createStream();
-      
-      // In @dank074 library, we usually play a resource/stream
-      // This is a simplified version using the library's capability
-      this.streamer.playVideo(streamInfo.url, udp);
+      // 4. Prepare and Play Stream
+      const { output } = prepareStream(streamInfo.stream, {
+        width: 1280,
+        height: 720,
+        fps: 30,
+        bitrateVideo: 3000,
+      });
+
+      await playStream(output, this.streamer, {
+        type: "go-live"
+      });
       
       Logger.info(`[STREAM] Real video stream started for: ${query}`);
       return true;
