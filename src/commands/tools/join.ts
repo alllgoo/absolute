@@ -56,7 +56,7 @@ const command: Command = {
     const currentVoice = message.guild?.me?.voice.channelId;
     if (currentVoice === vcId) {
       const errorUrl = EmbedBuilder.generateServerUrl('error', { 
-        msg: `I am already in the voice channel: **${vcName}**`,
+        msg: `I am already in the voice channel: <#${vcId}>`,
         image: message.author.displayAvatarURL({ dynamic: true, format: 'png' })
       });
       await message.reply({ content: errorUrl });
@@ -69,7 +69,7 @@ const command: Command = {
       const permissions = (targetChannel as any).permissionsFor(client.user?.id);
       if (permissions && !permissions.has('CONNECT')) {
         const errorUrl = EmbedBuilder.generateServerUrl('error', { 
-          msg: "I don't have permission to connect to this voice channel.",
+          msg: `I don't have permission to connect to <#${vcId}>.`,
           image: message.author.displayAvatarURL({ dynamic: true, format: 'png' })
         });
         await message.reply({ content: errorUrl });
@@ -84,13 +84,13 @@ const command: Command = {
     // 4. Try to Join
     const success = await client.voiceManager.joinChannel(vcId);
     if (success) {
-      const user = message.author.username;
+      const userMention = `<@${message.author.id}>`;
       const avatar = message.author.displayAvatarURL({ dynamic: true, format: 'png' });
-      const ogUrl = EmbedBuilder.generateServerUrl('join', { user, vc: vcName, image: avatar });
+      const ogUrl = EmbedBuilder.generateServerUrl('join', { user: userMention, vc: `<#${vcId}>`, image: avatar });
       await message.reply({ content: ogUrl });
     } else {
       const errorUrl = EmbedBuilder.generateServerUrl('error', { 
-        msg: "Failed to join the voice channel. It might be full or private.",
+        msg: `Failed to join the voice channel <#${vcId}>. It might be full or private.`,
         image: message.author.displayAvatarURL({ dynamic: true, format: 'png' })
       });
       await message.reply({ content: errorUrl });
