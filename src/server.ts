@@ -66,7 +66,7 @@ const renderOGPage = (title: string, description: string, color: string = "#2b2d
 // Route for &join -> /join?user=NAME&vc=VC
 app.get('/join', (req: Request, res: Response) => {
     const { user = "Someone", vc = "a voice channel" } = req.query;
-    res.send(renderOGPage("Voice System", `${user} has joined ${vc}`, "#23a559"));
+    res.send(renderOGPage("Voice System", `${user} has joined ${vc}`, "#97f9ff"));
 });
 
 // Route for &ping -> /ping?latency=MS&api=MS
@@ -90,7 +90,7 @@ app.get('/uptime', (req: Request, res: Response) => {
 // Route for generic messages -> /message?text=TEXT
 app.get('/message', (req: Request, res: Response) => {
     const { text = "Hello from Tokyo aid ϑρ" } = req.query;
-    res.send(renderOGPage("Message System", text as string, "#00a8fc"));
+    res.send(renderOGPage("Message System", text as string, "#97f9ff"));
 });
 
 // Route for &error -> /error?msg=TEXT
@@ -101,7 +101,7 @@ app.get('/error', (req: Request, res: Response) => {
 
 // Default Root
 app.get('/', (req: Request, res: Response) => {
-    res.send(renderOGPage("ℤ𝖊𝖑𝖉𝖗𝖎𝖘 System", "System ready to serve.", "#2b2d31"));
+    res.send(renderOGPage("ℤ𝖊𝖑𝖉𝖗𝖎𝖘 System", "System ready to serve.", "#97f9ff"));
 });
 
 app.listen(port, () => {

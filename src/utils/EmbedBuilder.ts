@@ -23,15 +23,10 @@ export class EmbedBuilder extends MessageEmbed {
     
     const query = new URLSearchParams(queryParams).toString();
     const fullUrl = `${baseUrl}/${route}${query ? `?${query}` : ''}`;
-    
-    // Returns the link formatted to be hidden in Discord while still triggering the embed
-    // Using U+2800 (Braille Pattern Blank) which is invisible but counts as a character
     return `[⠀](${fullUrl})`;
   }
 
-  /**
-   * Classic Embed style for fallback or other uses.
-   */
+
   static tokyo(title: string, description: string) {
     return new EmbedBuilder()
       .setTitle(title)
