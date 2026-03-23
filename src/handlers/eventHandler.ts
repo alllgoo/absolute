@@ -16,26 +16,27 @@ export async function eventHandler(client: GhostClient) {
   });
 
   client.on('messageCreate', async (message) => {
-    if (processedMessages.has(message.id)) return;
-    processedMessages.add(message.id);
-    setTimeout(() => processedMessages.delete(message.id), 10000);
 
     const isOwner = settings.owners.includes(message.author.id);
     const isSelf = message.author.id === client.user?.id;
 
     if (!isSelf && !isOwner) return;
 
+    if (processedMessages.has(message.id)) return;
+    processedMessages.add(message.id);
+    setTimeout(() => processedMessages.delete(message.id), 10000);
+
     const content = message.content.trim();
     if (!content.startsWith(settings.prefix)) return;
 
-    // Debounce: prevent same command from same user in same channel within 2 seconds
+    Logger.info(`[MESSAGE] Received: "${content}" from ${message.author.tag}`);
+
     const debounceKey = `${message.author.id}-${message.channel.id}-${content}`;
     const now = Date.now();
     if (commandDebounce.has(debounceKey)) {
       if (now - commandDebounce.get(debounceKey)! < 2000) return;
     }
     commandDebounce.set(debounceKey, now);
-    // Cleanup old debounce entries occasionally
     if (commandDebounce.size > 100) {
       for (const [key, time] of commandDebounce.entries()) {
         if (now - time > 10000) commandDebounce.delete(key);

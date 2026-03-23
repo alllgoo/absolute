@@ -7,7 +7,9 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 
 
-const renderOGPage = (title: string, description: string, color: string = "#97f9ff", image: string = "") => {
+const renderOGPage = (title: string, description: string, color: string = "#97f9ff", image: string = "", url: string = "https://absolute-seven.vercel.app/") => {
+    // Escape quotes in description to avoid breaking meta tag
+    const escapedDesc = description.replace(/"/g, '&quot;');
     const formattedDesc = description
         .replace(/\n/g, '<br>') 
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') 
@@ -24,11 +26,12 @@ const renderOGPage = (title: string, description: string, color: string = "#97f9
     
     <!-- Critical Open Graph Tags for Discord -->
     <meta property="og:title" content="${title}" />
-    <meta property="og:description" content="${description}" />
+    <meta property="og:description" content="${escapedDesc}" />
     <meta property="og:image" content="${image}" />
-    <meta property="og:url" content="https://absolute-seven.vercel.app/" />
+    <meta property="og:url" content="${url}" />
     <meta property="og:type" content="website" />
     <meta name="theme-color" content="${color}">
+    <meta name="twitter:card" content="summary_large_image">
     
     <title>${title}</title>
     <style>
@@ -75,12 +78,18 @@ const renderOGPage = (title: string, description: string, color: string = "#97f9
 
 app.get('/embed', (req: Request, res: Response) => {
     const { title = "System", desc = "No description provided", image = "" } = req.query;
-    res.send(renderOGPage(title as string, desc as string, "#97f9ff", image as string));
+    const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+    const host = req.get('host');
+    const fullUrl = `${protocol}://${host}${req.originalUrl}`;
+    res.send(renderOGPage(title as string, desc as string, "#97f9ff", image as string, fullUrl));
 });
 
 
 app.get('/', (req: Request, res: Response) => {
-    res.send(renderOGPage("ℤ𝖊𝖑𝖉𝖗𝖎𝖘 System", "System ready to serve.", "#97f9ff"));
+    const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+    const host = req.get('host');
+    const fullUrl = `${protocol}://${host}${req.originalUrl}`;
+    res.send(renderOGPage("ℤ𝖊𝖑𝖉𝖗𝖎𝖘 System", "System ready to serve.", "#97f9ff", "", fullUrl));
 });
 
 app.listen(port, () => {

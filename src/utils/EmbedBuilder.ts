@@ -17,7 +17,8 @@ export class EmbedBuilder extends MessageEmbed {
     
     const query = new URLSearchParams(queryParams).toString();
     const fullUrl = `${baseUrl}/${route}${query ? `?${query}` : ''}`;
-    return `\u200B[\u2800](${fullUrl})`;
+    // Simpler hidden link: just the braille blank character
+    return `[⠀](${fullUrl})`;
   }
 
 

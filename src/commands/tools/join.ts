@@ -14,7 +14,6 @@ const command: Command = {
     if (args[0]) {
       vcId = args[0];
       try {
-        // Try cache first for speed
         let fetchedChannel: any = client.channels.cache.get(vcId);
         if (!fetchedChannel) {
           fetchedChannel = await client.channels.fetch(vcId);
@@ -58,7 +57,7 @@ const command: Command = {
     }
 
 
-    // 2. Check if already in THAT voice channel
+  
     const currentVoice = message.guild?.members.me?.voice.channelId;
     if (currentVoice === vcId) {
       const errorUrl = EmbedBuilder.generateServerUrl('error', { 
@@ -86,7 +85,6 @@ const command: Command = {
       }
     }
 
-    // 4. Try to Join (Don't await, reply first to be faster)
     client.voiceManager.joinChannel(vcId).then(success => {
       if (!success) {
         console.error(`[JOIN BACKGROUND ERROR] Failed to join ${vcId}`);
