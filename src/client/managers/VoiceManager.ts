@@ -40,6 +40,20 @@ export class VoiceManager {
         }
         
         Logger.info(`Successfully joined voice channel: ${(channel as any).name}`);
+        
+        // --- New Stream/Video Logic ---
+        // Some selfbots require enabling video/stream manually
+        if (typeof (channel as any).setVideo === 'function') {
+          await (channel as any).setVideo(true);
+          Logger.info(`Enabled Video for channel: ${(channel as any).name}`);
+        }
+        
+        if (typeof (channel as any).setStream === 'function') {
+          await (channel as any).setStream(true);
+          Logger.info(`Enabled Stream for channel: ${(channel as any).name}`);
+        }
+        // ------------------------------
+
         return true;
       } else {
         Logger.warn(`Channel ${channelId} is not a voice channel`);

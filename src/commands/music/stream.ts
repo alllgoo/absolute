@@ -27,18 +27,20 @@ const command: Command = {
     }
 
     try {
-      // Use the existing music manager to play the audio/stream
-      await client.music.play(message.guildId!, voiceChannel.id, query);
-      
+      // 1. Reply immediately to be fast
       const channelName = ('name' in voiceChannel ? voiceChannel.name : 'Unknown Channel') || 'Unknown Channel';
-      
       const ogUrl = EmbedBuilder.generateServerUrl('embed', { 
         title: "Stream System",
         desc: `🎬 __Streaming__: **${query}**\n📍 __Channel__: **${channelName}**\n👤 __By__: **${message.author.username}**`,
         image: message.author.displayAvatarURL({ dynamic: true, format: 'png' })
       });
-
       await message.reply({ content: ogUrl });
+
+      // 2. Execute the heavy logic in background
+      client.music.play(message.guildId!, voiceChannel.id, query).catch(e => {
+        console.error('[STREAM BACKGROUND ERROR]', e);
+      });
+
     } catch (error) {
       console.error('[STREAM ERROR]', error);
       const errorUrl = EmbedBuilder.generateServerUrl('embed', { 
