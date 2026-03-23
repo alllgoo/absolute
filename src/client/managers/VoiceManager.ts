@@ -12,14 +12,19 @@ export class VoiceManager {
     try {
       const channel = await this.client.channels.fetch(channelId);
       if (channel && channel.isVoice()) {
-        // In selfbot-v13, we can use the join method on the voice channel
-        // or the connect method on the guild's voice manager.
-        // Let's use the channel.join() which is standard for selfbots.
-        await (channel as any).join({
-          selfVideo: false,
-          selfMute: false,
-          selfDeaf: false
-        });
+        // Use the built-in joinChannel method if available, or try channel.join()
+        // For discord.js-selfbot-v13, it's often channel.join()
+        // but sometimes it's handled by the client's voice manager
+        if ((this.client as any).voice && typeof (this.client as any).voice.joinChannel === 'function') {
+          await (this.client as any).voice.joinChannel(channel);
+        } else if (typeof (channel as any).join === 'function') {
+          await (channel as any).join();
+        } else if (typeof (channel as any).connect === 'function') {
+          await (channel as any).connect();
+        } else {
+          throw new Error('No join or connect method found on channel');
+        }
+        
         Logger.info(`Joined voice channel: ${(channel as any).name}`);
         return true;
       } else {

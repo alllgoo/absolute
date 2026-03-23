@@ -27,7 +27,7 @@ const command: Command = {
       vcId = voiceChannel.id;
       vcName = ('name' in voiceChannel ? voiceChannel.name : 'Unknown Channel') || 'Unknown Channel';
     } else {
-      const errorUrl = EmbedBuilder.generateServerUrl('error', { msg: "You must be in a voice channel or provide a valid voice channel ID." });
+      const errorUrl = EmbedBuilder.generateServerUrl('error', { msg: "You must be in a voice channel or channel ID." });
       await message.reply({ content: errorUrl });
       return;
     }
