@@ -28,12 +28,8 @@ const command: Command = {
       user: message.author.username 
     });
 
-    const response = 
-      `${ogUrl}\n` +
-      `*☁️ ﾟılı ﾟ.Tokyo aid ϑρ is ready to serve*`;
-
     await message.reply({
-      content: response
+      content: ogUrl
     });
   }
 };

@@ -24,12 +24,8 @@ const command: Command = {
       api: apiLatency.toString() 
     });
 
-    const response = 
-      `${ogUrl}\n` +
-      `*☁️ ﾟılı ﾟ.Tokyo aid ϑρ is ready to serve*`;
-
     await msg.edit({
-      content: response
+      content: ogUrl
     });
     } catch (error) {
       console.error('[PING ERROR]', error);

@@ -13,12 +13,8 @@ const command: Command = {
     // Generate dynamic server URL for Discord OG preview
     const ogUrl = EmbedBuilder.generateServerUrl('uptime', { time: uptimeText });
 
-    const response = 
-      `${ogUrl}\n` +
-      `*☁️ ﾟılı ﾟ.Tokyo aid ϑρ is ready to serve*`;
-
     await message.reply({
-      content: response
+      content: ogUrl
     });
   }
 };
