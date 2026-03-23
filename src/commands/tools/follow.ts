@@ -7,8 +7,6 @@ const command: Command = {
   category: 'tools',
   execute: async (client, message, args) => {
     const subCommand = args[0]?.toLowerCase();
-
-    // 1. follow off
     if (subCommand === 'off') {
       if (!client.followedUserId) {
         const url = EmbedBuilder.generateServerUrl('error', { 
@@ -27,7 +25,7 @@ const command: Command = {
       return;
     }
 
-    // 2. follow <userId>
+
     const targetId = args[0];
     if (!targetId) {
       const url = EmbedBuilder.generateServerUrl('error', { 
@@ -55,7 +53,7 @@ const command: Command = {
       });
       await message.reply({ content: url });
 
-      // Start the join in the background to reply faster
+
       for (const guild of client.guilds.cache.values()) {
         const member = guild.members.cache.get(targetId);
         if (member && member.voice.channelId) {

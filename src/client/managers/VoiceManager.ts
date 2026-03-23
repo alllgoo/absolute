@@ -41,19 +41,19 @@ export class VoiceManager {
         return false;
       }
     } catch (error) {
-      // Check if the error is actually a success (sometimes .join() doesn't resolve)
-      Logger.error(`Voice join attempt error: ${error}`);
+      // Check if the error is actually a success (sometimes .join() doesn't resolve in selfbots)
+      // We don't want to spam the log with timeout errors if we actually joined
       
       // Verification: Check if we are actually in the channel now
       try {
-        const channel = await this.client.channels.fetch(channelId);
-        const guild = (channel as any).guild;
-        if (guild && guild.me && guild.me.voice && guild.me.voice.channelId === channelId) {
-          Logger.info("Verified: Bot is in the channel despite the error.");
+        const guild = (this.client.channels.cache.get(channelId) as any)?.guild;
+        if (guild && guild.members.me?.voice?.channelId === channelId) {
+          Logger.info("Verified: Bot joined the channel (ignoring connection timeout).");
           return true;
         }
       } catch (e) {}
       
+      Logger.error(`Voice join error: ${error}`);
       return false;
     }
   }

@@ -53,7 +53,8 @@ const command: Command = {
     }
 
 
-    const currentVoice = message.guild?.me?.voice.channelId;
+    // 2. Check if already in THAT voice channel
+    const currentVoice = message.guild?.members.me?.voice.channelId;
     if (currentVoice === vcId) {
       const errorUrl = EmbedBuilder.generateServerUrl('error', { 
         msg: `I am already in the voice channel: ${vcName}`,
