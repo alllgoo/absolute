@@ -13,6 +13,9 @@ export class VoiceManager {
 
   public async startVideoStream(channelId: string, query: string, guildId: string) {
     try {
+      // 0. Clean the query (remove backticks, spaces, etc.)
+      const cleanQuery = query.replace(/[`\s]/g, '');
+      
       let channel: any = this.client.channels.cache.get(channelId);
       if (!channel) channel = await this.client.channels.fetch(channelId);
       
@@ -28,7 +31,7 @@ export class VoiceManager {
       Logger.info(`[STREAM] Joined voice channel for streaming: ${channel.name}`);
 
       // 3. Extract Stream using play-dl
-      const streamInfo = await play.stream(query, { quality: 2 });
+      const streamInfo = await play.stream(cleanQuery, { quality: 2 });
       
       // 4. Prepare and Play Stream
       const { output } = prepareStream(streamInfo.stream, {
@@ -41,7 +44,7 @@ export class VoiceManager {
         type: "go-live"
       });
       
-      Logger.info(`[STREAM] Real video stream started for: ${query}`);
+      Logger.info(`[STREAM] Real video stream started for: ${cleanQuery}`);
       return true;
     } catch (error) {
       Logger.error(`[STREAM ERROR] ${error}`);
